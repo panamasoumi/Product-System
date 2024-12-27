@@ -1,3 +1,11 @@
-<div>
-    <!-- Let all your things have their places; let each part of your business have its time. - Benjamin Franklin -->
-</div>
+<x-layout>
+
+<h1>{{ $product->name}}</h1>
+
+<p>{{ $product->description}}</p>
+
+<p>{{$product->size}}</p>
+
+<a href="{{ route('products.edit',$product->id) }}">Edit</a>
+
+</x-layout>

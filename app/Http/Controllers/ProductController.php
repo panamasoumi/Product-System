@@ -35,10 +35,13 @@ class ProductController extends Controller
 
     }
 
-    public function show(string $id)
+    public function show(Product $product)
     {
-        dd($id);
-        
-        return view('products.show');
+        return view('products.show',compact('product'));
+    }
+
+    public function edit(Product $product)
+    {
+        return view('products.edit', compact('product'));
     }
 }
