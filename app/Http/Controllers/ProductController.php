@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use League\CommonMark\Extension\DescriptionList\Node\Description;
+use App\Http\Requests\SaveProductRequest;
 
 class ProductController extends Controller
 {
@@ -12,7 +13,7 @@ class ProductController extends Controller
     {
     
         return view('products.index', [
-            'products' => Product::all()
+            'products' => Product::orderBy('created_at')->paginate(4)
         ]);
     }
 
@@ -21,17 +22,12 @@ class ProductController extends Controller
         return view('products.create');
     }
 
-    public function store(Request $request)
+    public function store(SaveProductRequest $request)
     {
-        $request->validate([
-            'name'=>'required|max:100',
-            'description'=>'nullable|min:3',
-            'size'=>'required|decimal:0,2|max:100'
-        ]);
+        $product = product::create($request->validated());
 
-        product::create($request->input());
-
-        return redirect()->route('products.index');
+        return redirect()->route('products.show', $product)
+                         ->with('status','Product Created');
 
     }
 
@@ -43,5 +39,21 @@ class ProductController extends Controller
     public function edit(Product $product)
     {
         return view('products.edit', compact('product'));
+    }
+
+    public function update(SaveProductRequest $request, Product $product)
+    {
+        $product->update($request->validated());
+
+        return redirect()->route('products.show',$product)
+                         ->with('status','Product Updated');
+    }
+
+    public function delete(Product $product)
+    {
+        $product->delete();
+
+        return redirect()->route('products.index')
+                                ->with('status','product deleted');
     }
 }

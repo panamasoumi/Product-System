@@ -8,4 +8,11 @@
 
 <a href="{{ route('products.edit',$product->id) }}">Edit</a>
 
+<form method="post" action="{{ route('products.delete',$product)}}">
+    @csrf
+    @method('DELETE')
+
+    <button>Delete</button>
+</form>    
+
 </x-layout>
